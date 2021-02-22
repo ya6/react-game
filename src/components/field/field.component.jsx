@@ -20,10 +20,11 @@ const Field = ( { field }) => {
 
     }
  
+    const _style = { display: 'flex' }
 
   return (
       <div className = "field">
-{ blocks }
+{ blocks.map(blocks_y => {return (<div style={_style}> { blocks_y} </div>)}) }
       </div>  
   
   );

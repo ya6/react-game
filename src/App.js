@@ -8,7 +8,7 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      fieldSize: 10,
+      fieldSize: 7,
       field: [],
     };
   }
@@ -23,7 +23,7 @@ class App extends Component {
     }
 
     for (let b = 0; b < fieldSize; b++) {
-      _arr[_random(0,9)][_random(0,9)] = -1
+      _arr[_random(0, this.state.fieldSize-1)][_random(0, this.state.fieldSize-1)] = -1
     }
 
    // console.log(_arr);
