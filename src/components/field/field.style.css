@@ -1,0 +1,6 @@
+.field {
+    width: 80vw;
+    height: 300px;
+    border: 1px solid grey;
+    background: rgb(243, 241, 241);
+}
