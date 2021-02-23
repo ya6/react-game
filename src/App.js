@@ -8,7 +8,8 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      fieldSize: 7,
+      fieldSize: 10
+      ,
       field: [],
     };
   }
@@ -27,7 +28,7 @@ class App extends Component {
     }
 
    // console.log(_arr);
-    this.setState( { field: _arr}, ()=> console.log(this.state.field));
+    this.setState( { field: _arr});
   }
 
   render() {

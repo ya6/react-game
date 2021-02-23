@@ -11,7 +11,7 @@ const Field = ( { field }) => {
        
         for (let x = 0; x < field.length; x++) {
            
-            blocks_y.push(<FieldBlock key = {`${y}-${x}`} />);
+            blocks_y.push(<FieldBlock key = {`${y}-${x}`}  block = {field[y][x] }/>);
 
             
         }
@@ -20,7 +20,8 @@ const Field = ( { field }) => {
 
     }
  
-    const _style = { display: 'flex' }
+    const _style = { display: 'flex' };
+  
 
   return (
       <div className = "field">
@@ -32,3 +33,6 @@ const Field = ( { field }) => {
 
 export default Field;
 // field.length <FieldBlock key = {`${field[0][0]}`} />
+
+
+//(<FieldBlock style={_style}> block ={ blocks_y} </FieldBlock>
