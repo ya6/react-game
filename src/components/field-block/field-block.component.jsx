@@ -1,9 +1,10 @@
 import "./field-block.style.css";
 
 const FieldBlock = ({ block }) => {
+ // console.log(block);
   return (
       <div className = "field-block">
-          {block}
+          {block.val}
       </div>  
   )
 };
