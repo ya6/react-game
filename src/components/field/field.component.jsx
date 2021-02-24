@@ -1,7 +1,7 @@
 import "./field.style.css";
 import FieldBlock from '../field-block'
 
-const Field = ( { field }) => {
+const Field = ( { field, changeStatus }) => {
 
     const blocks = [];
     let blocks_y = [];
@@ -11,7 +11,7 @@ const Field = ( { field }) => {
        
         for (let x = 0; x < field.length; x++) {
            
-            blocks_y.push(<FieldBlock key = {`${y}-${x}`}  block = {field[y][x] }/>);
+            blocks_y.push(<FieldBlock key = {`${y}-${x}`}  block = {field[y][x]} changeStatus = {changeStatus }  />);
 
             
         }
