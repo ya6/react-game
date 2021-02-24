@@ -83,13 +83,26 @@ class App extends Component {
   }
 
   // changeStatus = ()=> { this.setState({ field: this.state.field[y][x].status = 'opened' });};
-  changeStatus = (block)=> { console.log('App changeStatus ',block)};
+  leftClickHandler = (block)=> { 
+    const _arr = this.state.field;
+
+_arr[block.y][block.x].status = 'opened';
+    
+    this.setState({ field: _arr });
+
+};
+
+rightClickHandler = (e, block) => {
+  e.preventDefault();
+  console.log('rightClickHandler', block);
+}
 
 
   render() {
     return (
       <div className="App">
-        <Field field={this.state.field} changeStatus = {this.changeStatus} />
+        <Field field={this.state.field} leftClickHandler = {this.leftClickHandler}
+         rightClickHandler = {this.rightClickHandler} />
       </div>
     );
   }

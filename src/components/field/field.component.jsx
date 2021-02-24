@@ -1,7 +1,7 @@
 import "./field.style.css";
 import FieldBlock from '../field-block'
 
-const Field = ( { field, changeStatus }) => {
+const Field = ( { field, rightClickHandler, leftClickHandler }) => {
 
     const blocks = [];
     let blocks_y = [];
@@ -11,7 +11,9 @@ const Field = ( { field, changeStatus }) => {
        
         for (let x = 0; x < field.length; x++) {
            
-            blocks_y.push(<FieldBlock key = {`${y}-${x}`}  block = {field[y][x]} changeStatus = {changeStatus }  />);
+            blocks_y.push(<FieldBlock key = {`${y}-${x}`}  block = {field[y][x]} 
+            rightClickHandler = {rightClickHandler}
+            leftClickHandler = {leftClickHandler } />);
 
             
         }
@@ -32,7 +34,3 @@ const Field = ( { field, changeStatus }) => {
 }
 
 export default Field;
-// field.length <FieldBlock key = {`${field[0][0]}`} />
-
-
-//(<FieldBlock style={_style}> block ={ blocks_y} </FieldBlock>
