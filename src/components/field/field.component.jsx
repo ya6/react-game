@@ -27,7 +27,7 @@ const Field = ( { field, rightClickHandler, leftClickHandler }) => {
 
   return (
       <div className = "field">
-{ blocks.map(blocks_y => {return (<div style={_style}> { blocks_y} </div>)}) }
+{ blocks.map((blocks_y, index) => {return (<div key = {index} style={_style}> { blocks_y} </div>)}) }
       </div>  
   
   );

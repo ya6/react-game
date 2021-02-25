@@ -2,6 +2,7 @@ import "./App.css";
 import { Component } from "react";
 import Field from "./components/field";
 import _random from "./helpers/_random";
+import { logDOM } from "@testing-library/react";
 
 class App extends Component {
   constructor() {
@@ -9,7 +10,7 @@ class App extends Component {
     this.state = {
       fieldSize: 10,
       field: [],
-      currentBlock: {}
+      currentBlock: {},
     };
   }
 
@@ -20,7 +21,7 @@ class App extends Component {
     for (var y = 0; y < fieldSize; y++) {
       _arr[y] = [];
       for (var x = 0; x < fieldSize; x++) {
-        _arr[y][x] = { val: 0, status: "hidden",y: y,x: x };
+        _arr[y][x] = { val: 0, status: "hidden", y: y, x: x };
       }
     }
 
@@ -82,27 +83,69 @@ class App extends Component {
     this.setState({ field: _arr });
   }
 
-  // changeStatus = ()=> { this.setState({ field: this.state.field[y][x].status = 'opened' });};
-  leftClickHandler = (block)=> { 
+  leftClickHandler = (block) => {
     const _arr = this.state.field;
 
-_arr[block.y][block.x].status = 'opened';
-    
+    switch (block.val) {
+      case -1:
+        console.log("boom");
+        break;
+      case 0:
+        this.handleEmptyArea(block, _arr);
+        break;
+
+      default:
+        _arr[block.y][block.x].status = "opened";
+        break;
+    }
+
     this.setState({ field: _arr });
+  };
 
-};
+  handleEmptyArea = (block, _arr) => {
+    _arr[block.y][block.x].status = "opened";
+   
+    if (block.y - 1 >= 0) {
+      if (_arr[block.y - 1][block.x].val === 0 &&  _arr[block.y - 1][block.x].status === 'hidden') {
+        this.handleEmptyArea(_arr[block.y - 1][block.x], _arr);
+      }
+    }
 
-rightClickHandler = (e, block) => {
-  e.preventDefault();
-  console.log('rightClickHandler', block);
-}
+    if (block.y + 1 < _arr.length) {
+      if (_arr[block.y + 1][block.x].val === 0 && _arr[block.y + 1][block.x].status === 'hidden') {
+        this.handleEmptyArea(_arr[block.y + 1][block.x], _arr);
+      }
+    }
+   
+    if (block.x - 1 >= 0) {
+      if (_arr[block.y][block.x - 1].val === 0 &&  _arr[block.y][block.x - 1].status === 'hidden') {
+        this.handleEmptyArea(_arr[block.y][block.x -1], _arr);
+      }
+    }
 
+
+    if (block.x + 1 < _arr[0].length) {
+      if (_arr[block.y][block.x + 1].val === 0 && _arr[block.y][block.x + 1].status === 'hidden') {
+        this.handleEmptyArea(_arr[block.y][block.x + 1], _arr);
+      }
+    }
+
+    return _arr;
+  };
+
+  rightClickHandler = (e, block) => {
+    e.preventDefault();
+    console.log("rightClickHandler", block);
+  };
 
   render() {
     return (
       <div className="App">
-        <Field field={this.state.field} leftClickHandler = {this.leftClickHandler}
-         rightClickHandler = {this.rightClickHandler} />
+        <Field
+          field={this.state.field}
+          leftClickHandler={this.leftClickHandler}
+          rightClickHandler={this.rightClickHandler}
+        />
       </div>
     );
   }
