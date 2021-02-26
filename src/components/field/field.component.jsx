@@ -12,12 +12,9 @@ const Field = ( { field, rightClickHandler, leftClickHandler }) => {
            
             blocks.push(<FieldBlock key = {`${y}-${x}`}  block = {field[y][x]} 
             rightClickHandler = {rightClickHandler}
-            leftClickHandler = {leftClickHandler } />);
-
-            
+            leftClickHandler = {leftClickHandler } />);          
         }
-      
-
+    
     }
  
 
