@@ -1,7 +1,7 @@
 .field {
     
-    width: 40rem;
-    height: 40rem;
+    max-width: 90%;
+    /* height: 40rem; */
 position: relative;
 
 

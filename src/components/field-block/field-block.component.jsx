@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "./field-block.style.css";
+import back_url from "../../assets/img/dig_bel_2+.png";
 
 class FieldBlock extends Component {
   // constructor(props) {
@@ -13,41 +14,65 @@ class FieldBlock extends Component {
   context = null;
 
   componentDidMount() {
-    //console.log( ['canvasRef']);
-    this.canvas = this["canvasRef"].current;
-    //console.log(this.canvas);
-    this.context = this.canvas.getContext("2d");
-    //   console.log(this.canvas);
-    // console.log(this.context);
+    //  console.log(this.props.block);
 
-    this.context.rect(0, 0, 300, 150);
-    this.context.fill();
-    //  console.log( this.context);
-    //  const img = this.refs.image
+    const { block, imageRatio } = this.props;
+
+    console.log(imageRatio);
+
+    const image = new Image();
+    image.src = back_url;
+
+    image.addEventListener("load", () => {
+      this.canvas = this["canvasRef"].current;
+      this.context = this.canvas.getContext("2d");
+      this.canvas.width = '100';
+    this.canvas.height = '100';
+
+      console.log("load");
+
+      // void ctx.drawImage(image, dx, dy);
+      // void ctx.drawImage(image, dx, dy, dWidth, dHeight);
+      //  void ctx.drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
+
+      this.context.drawImage(
+        image,
+        block.left * imageRatio,
+        block.top * imageRatio,
+        block.size * imageRatio,
+        block.size * imageRatio,
+        0,
+        0,
+        this.canvas.width,
+        this.canvas.width,
+      );
+    });
+
+    
+
+    // this.context.rect(0, 0, 300, 150);
+    // this.context.fill();
   }
-  // componentDidUpdate() {
-  //   this.updateCanvas( this.props.block);
-  // }
 
-  updateCanvas() {
-    console.log(this.canvas.getContext("2d"));
+  updateCanvas = (block) => {
+    console.log(block);
+    //console.log(this.canvas.getContext("2d"));
     const context = this.canvas.getContext("2d");
-    context.fillStyle = "#fff5f5";
-    context.rect(10, 10, 50, 50);
-    context.fill();
-    //   this.context.font = 10 + 'px Arial Black';
-    //   this.context.textAlign = "center";
-    //   this.context.textBaseline = 'middle';
-    //   this.context.fillStyle = "#fff5f5";
-    //   this.context.shadowBlur = 10;
-    //   this.context.shadowColor = "black";
-    //  this.context.fillText(block.val, block.width / 2, block.height / 2);
-  }
+    //  context.fillStyle = "#fff5f5";
+    // context.rect(10, 10, 50, 50);
+    // context.fill();
+    context.font = block.size/2 + "px Arial";
+    context.textAlign = "center";
+    context.textBaseline = "middle";
+    context.fillStyle = "black";
+    //  context.fillText(block.val, block.width / 2, block.height / 2);
+
+    context.fillText(String(block.val), 50, 50);
+  };
 
   render() {
-    const { block, leftClickHandler, rightClickHandler } = this.props;
+    const { block, leftClickHandler, rightClickHandler, imageRatio } = this.props;
 
-    //const blockState = block.status === "opened" ? block.val : null;
 
     if (block.status === "opened") {
       this.updateCanvas(block);

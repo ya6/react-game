@@ -2,28 +2,33 @@ import "./App.css";
 import { Component } from "react";
 import Field from "./components/field";
 import _random from "./helpers/_random";
-import back_url from './assets/img/dig_bel_2.png';
-
 class App extends Component {
   constructor() {
     super();
     this.state = {
       fieldWidth: 10,
       fieldHeight: 8,
-      size: 40,
+      size: 50,
       spots: 10,
       field: [],
       currentBlock: {},
+      imageRatio: 1,
+      imageWidth: 1000,
+
     };
   }
  
   componentDidMount() {
 
-  console.log(back_url);
+ // console.log(back_url);
 
     //set arr
-    const { fieldWidth, fieldHeight, spots, size } = this.state;
+    const { fieldWidth, fieldHeight, spots, size, imageRatio, imageWidth } = this.state;
+
+    const _imageRatio = imageWidth / (fieldWidth * size);
     const _arr = [];
+   
+
     for (var y = 0; y < fieldHeight; y++) {
       _arr[y] = [];
       for (var x = 0; x < fieldWidth; x++) {
@@ -88,7 +93,9 @@ class App extends Component {
       }
     }
 
-    this.setState({ field: _arr });
+
+
+    this.setState({ field: _arr, imageRatio: _imageRatio });
   }
 
   leftClickHandler = (block) => {
@@ -151,6 +158,7 @@ class App extends Component {
       <div className="App">
         <Field
           field={this.state.field}
+          imageRatio = {this.state.imageRatio}
           leftClickHandler={this.leftClickHandler}
           rightClickHandler={this.rightClickHandler}
         />
