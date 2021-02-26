@@ -1,6 +1,15 @@
 .field {
-    width: 80vw;
-    height: 300px;
-    border: 1px solid grey;
-    background: rgb(243, 241, 241);
+    
+    width: 40rem;
+    height: 40rem;
+position: relative;
+
+
+margin: 0 auto;
+
+  border: 2px solid blue;
+  border-radius: 10px;
+  box-sizing: content-box;
+  background: grey;
+  box-shadow: 4px 4px 8px 0 rgba(0, 0, 0, 0.5);
 }

@@ -9,7 +9,7 @@ const Field = ( { field, rightClickHandler, leftClickHandler }) => {
     for (let y = 0; y < field.length; y++) {
 
        
-        for (let x = 0; x < field.length; x++) {
+        for (let x = 0; x < field[0].length; x++) {
            
             blocks_y.push(<FieldBlock key = {`${y}-${x}`}  block = {field[y][x]} 
             rightClickHandler = {rightClickHandler}

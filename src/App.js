@@ -2,39 +2,47 @@ import "./App.css";
 import { Component } from "react";
 import Field from "./components/field";
 import _random from "./helpers/_random";
-import { logDOM } from "@testing-library/react";
+import back_url from './assets/img/dig_bel_2.png';
 
 class App extends Component {
   constructor() {
     super();
     this.state = {
-      fieldSize: 10,
+      fieldWidth: 10,
+      fieldHeight: 8,
+      size: 40,
+      spots: 10,
       field: [],
       currentBlock: {},
     };
   }
-
+ 
   componentDidMount() {
+
+  console.log(back_url);
+
     //set arr
-    const { fieldSize } = this.state;
+    const { fieldWidth, fieldHeight, spots, size } = this.state;
     const _arr = [];
-    for (var y = 0; y < fieldSize; y++) {
+    for (var y = 0; y < fieldHeight; y++) {
       _arr[y] = [];
-      for (var x = 0; x < fieldSize; x++) {
-        _arr[y][x] = { val: 0, status: "hidden", y: y, x: x };
+      for (var x = 0; x < fieldWidth; x++) {
+        _arr[y][x] = { val: 0, status: "hidden", y: y, x: x, 
+        size: size, 
+      left:x * size, top:y * size};
       }
     }
 
     //set bombs
-    for (let b = 0; b < fieldSize; b++) {
-      _arr[_random(0, this.state.fieldSize - 1)][
-        _random(0, this.state.fieldSize - 1)
+    for (let b = 0; b < spots; b++) {
+      _arr[_random(0, this.state.fieldHeight - 1)][
+        _random(0, this.state.fieldWidth - 1)
       ].val = -1;
     }
 
     //set other blocks
-    for (let y = 0; y < fieldSize; y++) {
-      for (let x = 0; x < fieldSize; x++) {
+    for (let y = 0; y < fieldHeight; y++) {
+      for (let x = 0; x < fieldWidth; x++) {
         if (_arr[y][x].val !== -1) {
           if (y - 1 >= 0 && x - 1 >= 0) {
             _arr[y][x].val += +(_arr[y - 1][x - 1].val === -1);
@@ -44,23 +52,23 @@ class App extends Component {
             _arr[y][x].val += +(_arr[y - 1][x].val === -1);
           }
 
-          if (y - 1 >= 0 && x + 1 < fieldSize) {
+          if (y - 1 >= 0 && x + 1 < fieldHeight) {
             _arr[y][x].val += +(_arr[y - 1][x + 1].val === -1);
           }
 
-          if (x + 1 < fieldSize) {
+          if (x + 1 < fieldWidth) {
             _arr[y][x].val += +(_arr[y][x + 1].val === -1);
           }
 
-          if (y + 1 < fieldSize && x + 1 < fieldSize) {
+          if (y + 1 < fieldHeight && x + 1 < fieldWidth) {
             _arr[y][x].val += +(_arr[y + 1][x + 1].val === -1);
           }
 
-          if (y + 1 < fieldSize) {
+          if (y + 1 < fieldHeight) {
             _arr[y][x].val += +(_arr[y + 1][x].val === -1);
           }
 
-          if (y + 1 < fieldSize && x - 1 >= 0) {
+          if (y + 1 < fieldHeight && x - 1 >= 0) {
             _arr[y][x].val += +(_arr[y + 1][x - 1].val === -1);
           }
 
