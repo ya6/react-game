@@ -3,5 +3,6 @@
     height: 3rem; */
    position: absolute;
     /* background: rgb(206, 225, 177); */
-    border: 1px solid grey;
+    /* border: 1px solid grey; */
+    box-shadow: 4px 4px 8px 0px rgba(255, 255, 255, 1) inset;
 }

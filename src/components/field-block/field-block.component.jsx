@@ -14,11 +14,8 @@ class FieldBlock extends Component {
   context = null;
 
   componentDidMount() {
-    //  console.log(this.props.block);
-
+  
     const { block, imageRatio } = this.props;
-
-    console.log(imageRatio);
 
     const image = new Image();
     image.src = back_url;
@@ -26,14 +23,8 @@ class FieldBlock extends Component {
     image.addEventListener("load", () => {
       this.canvas = this["canvasRef"].current;
       this.context = this.canvas.getContext("2d");
-      this.canvas.width = '100';
-    this.canvas.height = '100';
-
-      console.log("load");
-
-      // void ctx.drawImage(image, dx, dy);
-      // void ctx.drawImage(image, dx, dy, dWidth, dHeight);
-      //  void ctx.drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
+      this.canvas.width = "100";
+      this.canvas.height = "100";
 
       this.context.drawImage(
         image,
@@ -41,41 +32,93 @@ class FieldBlock extends Component {
         block.top * imageRatio,
         block.size * imageRatio,
         block.size * imageRatio,
-        0,
-        0,
-        this.canvas.width,
-        this.canvas.width,
+        5,
+        5,
+        this.canvas.width - 5,
+        this.canvas.width - 5
       );
     });
-
-    
-
-    // this.context.rect(0, 0, 300, 150);
-    // this.context.fill();
   }
 
-  updateCanvas = (block) => {
-    console.log(block);
-    //console.log(this.canvas.getContext("2d"));
+  showSpot = (block, imageRatio) => {
     const context = this.canvas.getContext("2d");
-    //  context.fillStyle = "#fff5f5";
-    // context.rect(10, 10, 50, 50);
-    // context.fill();
-    context.font = block.size/2 + "px Arial";
+    context.font = (block.size * imageRatio) / 2 + "px Arial";
     context.textAlign = "center";
     context.textBaseline = "middle";
     context.fillStyle = "black";
-    //  context.fillText(block.val, block.width / 2, block.height / 2);
+
+    context.shadowColor = "#bfbfbf";
+    context.shadowOffsetX = 3;
+    context.shadowOffsetY = 3;
+    context.shadowBlur = 3;
 
     context.fillText(String(block.val), 50, 50);
+
+
+  }
+
+  updateCanvas = (block, imageRatio) => { 
+    const context = this.canvas.getContext("2d");
+   
+    if (block.val > 0 ) {
+      context.font = (block.size * imageRatio) / 2 + "px Arial";
+    context.textAlign = "center";
+    context.textBaseline = "middle";
+    context.fillStyle = "black";
+
+    context.shadowColor = "#bfbfbf";
+    context.shadowOffsetX = 3;
+    context.shadowOffsetY = 3;
+    context.shadowBlur = 3;
+
+    context.fillText(String(block.val), 50, 50);
+    }
+
+    if (block.val === 0 ) {
+
+      context.fillStyle = '#bdfcfc';
+
+      context.fillRect(5, 5, 100 - 5, 100 - 5);
+      
+    }
+
+    // if (block.val === -1) {
+
+    //   for (let block = 0; block < blocks.length; block++) {
+        
+    //     context.font = (block.size * imageRatio) / 2 + "px Arial";
+    //     context.textAlign = "center";
+    //     context.textBaseline = "middle";
+    //     context.fillStyle = "black";
+    
+    //     context.shadowColor = "#bfbfbf";
+    //     context.shadowOffsetX = 3;
+    //     context.shadowOffsetY = 3;
+    //     context.shadowBlur = 3;
+    
+    //     context.fillText(String(block.val), 50, 50);
+        
+    //   }
+      
+    // }
+    
   };
 
   render() {
-    const { block, leftClickHandler, rightClickHandler, imageRatio } = this.props;
-
+    const {
+      block,
+      leftClickHandler,
+      rightClickHandler,
+      imageRatio,
+      
+    } = this.props;
 
     if (block.status === "opened") {
-      this.updateCanvas(block);
+      this.updateCanvas(block, imageRatio);
+    }
+
+    if (block.status === "blow") {
+      this.showSpot(block, imageRatio);
     }
 
     const _style = {

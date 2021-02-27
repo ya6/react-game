@@ -23,7 +23,7 @@ class App extends Component {
  // console.log(back_url);
 
     //set arr
-    const { fieldWidth, fieldHeight, spots, size, imageRatio, imageWidth } = this.state;
+    const { fieldWidth, fieldHeight, spots, size,  imageWidth } = this.state;
 
     const _imageRatio = imageWidth / (fieldWidth * size);
     const _arr = [];
@@ -80,15 +80,6 @@ class App extends Component {
           if (x - 1 >= 0) {
             _arr[y][x].val += +(_arr[y][x - 1].val === -1);
           }
-
-          //_arr[y-1][x-1]
-          // _arr[y-1][x]
-          // _arr[y-1][x+1]
-          // _arr[y][x+1]
-          // _arr[y+1][x+1]
-          // _arr[y+1][x]
-          // _arr[y+1][x-1]
-          // _arr[y][x-1]
         }
       }
     }
@@ -104,6 +95,18 @@ class App extends Component {
     switch (block.val) {
       case -1:
         console.log("boom");
+for (let y = 0; y < _arr.length; y++) {
+ 
+  for (let x = 0; x < _arr[0].length; x++) {
+    
+    if (_arr[y][x].val === -1) {
+
+      _arr[y][x].status = 'blow';
+      
+    }
+  }
+}
+
         break;
       case 0:
         this.handleEmptyArea(block, _arr);
