@@ -1,12 +1,14 @@
-export default async function _imageLoader(sprites) {
+ const _imageLoader = async (url) => {
     console.log('@loadImages');
-     for (const sprite in sprites) {
- 
-         sprites[sprite].img.src = sprites[sprite].url;
-         await sprites[sprite].img.decode();      
-         
-     }
-  // console.log(window.location.pathname.split('/'));
-     return 'images uploaded';
+    const image = new Image();
+     image.src = url;
+      await image.decode();      
+        
+     return 'ok';
  
  }
+
+
+ export default _imageLoader;
+
+ // console.log(window.location.pathname.split('/'));

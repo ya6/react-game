@@ -1,7 +1,8 @@
 import "./field.style.css";
 import FieldBlock from '../field-block'
 
-const Field = ( { field, rightClickHandler, leftClickHandler, imageRatio }) => {
+
+const Field = ( { field, rightClickHandler, leftClickHandler, imageRatio,  back, med_box }) => {
 
     const blocks = [];
  
@@ -12,7 +13,9 @@ const Field = ( { field, rightClickHandler, leftClickHandler, imageRatio }) => {
            
             blocks.push(<FieldBlock key = {`${y}-${x}`}
             block = { field[y][x] }
-             imageRatio = { imageRatio }
+            imageRatio = { imageRatio }
+            back = { back}
+            med_box = { med_box }
             rightClickHandler = { rightClickHandler }
             leftClickHandler = { leftClickHandler } />);          
         }
