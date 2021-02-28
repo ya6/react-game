@@ -142,7 +142,7 @@ class FieldBlock extends Component {
   }
 
   updateCanvas = (block, imageRatio) => {
-    console.log("updateCanvas");
+   // console.log("updateCanvas");
 
     const context = this.canvas.getContext("2d");
 
