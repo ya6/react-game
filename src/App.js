@@ -2,107 +2,190 @@ import "./App.css";
 import React, { Component } from "react";
 import Field from "./components/field";
 import _random from "./helpers/_random";
-import Removed from "./components/removed";
+import back_url from "./assets/img/dig_bel_2+.png";
 
 class App extends Component {
-  constructor() {
-    super();
-    this.state = {
-      fieldWidth: 10,
-      fieldHeight: 8,
-      size: 50,
-      spots: 10,
-      field: [],
-      currentBlock: {},
-      imageRatio: 1,
-      imageWidth: 1000,
-      gameOver: false,
-    };
-  }
+  state = {
+    fieldWidth: 10,
+    fieldHeight: 8,
+    size: 50,
+    spots: 10,
+    field: [],
+    currentBlock: {},
+    imageRatio: 1,
+    imageWidth: 1000,
+    playGame: false,
+    gameOver: false,
+  };
+
+  removed_canvasRef = React.createRef();
 
   componentDidMount() {
     console.log("App componentDidMount");
 
     const { fieldWidth, fieldHeight, spots, size, imageWidth } = this.state;
 
-    //todo get color
-
-    // const basic_canvasRef = React.createRef();
-
-    // const back = new Image();
-
-    // back.src = back_url;
-
-    // back.addEventListener("load", () => {});
-
-    //set arr
     const _imageRatio = imageWidth / (fieldWidth * size);
+    //get arr
     const _arr = [];
 
-    for (var y = 0; y < fieldHeight; y++) {
-      _arr[y] = [];
-      for (var x = 0; x < fieldWidth; x++) {
-        _arr[y][x] = {
-          val: 0,
-          status: "hidden",
-          y: y,
-          x: x,
-          size: size,
-          left: x * size,
-          top: y * size,
-          med: false,
-          updated: 0,
-        };
+    const canvas = this.removed_canvasRef.current;
+    const context = canvas.getContext("2d");
+    canvas.width = fieldWidth * size;
+    canvas.height = fieldHeight * size;
+
+    const image = new Image();
+    image.src = back_url;
+    image.addEventListener("load", () => {
+      context.drawImage(image, 0, 0, canvas.width, canvas.height);
+      const compensation = 3;
+      for (let y = 0; y < fieldHeight; y++) {
+        _arr[y] = [];
+
+        for (let x = 0; x < fieldWidth; x++) {
+          if (
+            context.getImageData(
+              x * size + compensation,
+              y * size + compensation,
+              1,
+              1
+            ).data[0] > 0 ||
+            context.getImageData(
+              x * size + compensation,
+              y * size + size + compensation,
+              1,
+              1
+            ).data[0] > 0 ||
+            context.getImageData(
+              x * size + size - compensation,
+              y * size + compensation,
+              1,
+              1
+            ).data[0] > 0 ||
+            context.getImageData(
+              x * size + size - compensation,
+              y * size + size - compensation,
+              1,
+              1
+            ).data[0] > 0
+          ) {
+            _arr[y][x] = {
+              val: 0,
+              status: "hidden",
+              y: y,
+              x: x,
+              size: size,
+              left: x * size,
+              top: y * size,
+              med: false,
+              updated: 0,
+            };
+          } else {
+            _arr[y][x] = {
+              val: -2,
+              status: "hidden",
+              y: y,
+              x: x,
+              size: size,
+              left: x * size,
+              top: y * size,
+              med: false,
+              updated: 0,
+            };
+          }
+
+          context.strokeStyle = "red";
+          context.strokeRect(
+            x * size + compensation,
+            y * size + compensation,
+            1,
+            1
+          );
+          context.strokeStyle = "green";
+          context.strokeRect(
+            x * size + compensation,
+            y * size + size - compensation,
+            1,
+            1
+          );
+          context.strokeStyle = "blue";
+          context.strokeRect(
+            x * size + size - compensation,
+            y * size + compensation,
+            1,
+            1
+          );
+          context.strokeStyle = "orange";
+          context.strokeRect(
+            x * size + size - compensation,
+            y * size + size - compensation,
+            1,
+            1
+          );
+        }
       }
-    }
 
-    //set bombs
-    for (let b = 0; b < spots; b++) {
-      _arr[_random(0, this.state.fieldHeight - 1)][
-        _random(0, this.state.fieldWidth - 1)
-      ].val = -1;
-    }
+      // set bombs
+      let b = 0;
+      while (b < spots) {
+        if (
+          _arr[_random(0, this.state.fieldHeight - 1)][
+            _random(0, this.state.fieldWidth - 1)
+          ].val !== -2 ||
+          _arr[_random(0, this.state.fieldHeight - 1)][
+            _random(0, this.state.fieldWidth - 1)
+          ].val !== -1
+        ) {
+          b += 1;
+          //  console.log(b);
+          _arr[_random(0, this.state.fieldHeight - 1)][
+            _random(0, this.state.fieldWidth - 1)
+          ].val = -1;
+        }
+      }
+      // set other blocks
+      for (let y = 0; y < fieldHeight; y++) {
+        for (let x = 0; x < fieldWidth; x++) {
+          if (_arr[y][x].val !== -1 && _arr[y][x].val !== -2) {
+            if (y - 1 >= 0 && x - 1 >= 0) {
+              _arr[y][x].val += +(_arr[y - 1][x - 1].val === -1);
+            }
 
-    //set other blocks
-    for (let y = 0; y < fieldHeight; y++) {
-      for (let x = 0; x < fieldWidth; x++) {
-        if (_arr[y][x].val !== -1) {
-          if (y - 1 >= 0 && x - 1 >= 0) {
-            _arr[y][x].val += +(_arr[y - 1][x - 1].val === -1);
-          }
+            if (y - 1 >= 0) {
+              _arr[y][x].val += +(_arr[y - 1][x].val === -1);
+            }
 
-          if (y - 1 >= 0) {
-            _arr[y][x].val += +(_arr[y - 1][x].val === -1);
-          }
+            if (y - 1 >= 0 && x + 1 < fieldHeight) {
+              _arr[y][x].val += +(_arr[y - 1][x + 1].val === -1);
+            }
 
-          if (y - 1 >= 0 && x + 1 < fieldHeight) {
-            _arr[y][x].val += +(_arr[y - 1][x + 1].val === -1);
-          }
+            if (x + 1 < fieldWidth) {
+              _arr[y][x].val += +(_arr[y][x + 1].val === -1);
+            }
 
-          if (x + 1 < fieldWidth) {
-            _arr[y][x].val += +(_arr[y][x + 1].val === -1);
-          }
+            if (y + 1 < fieldHeight && x + 1 < fieldWidth) {
+              _arr[y][x].val += +(_arr[y + 1][x + 1].val === -1);
+            }
 
-          if (y + 1 < fieldHeight && x + 1 < fieldWidth) {
-            _arr[y][x].val += +(_arr[y + 1][x + 1].val === -1);
-          }
+            if (y + 1 < fieldHeight) {
+              _arr[y][x].val += +(_arr[y + 1][x].val === -1);
+            }
 
-          if (y + 1 < fieldHeight) {
-            _arr[y][x].val += +(_arr[y + 1][x].val === -1);
-          }
+            if (y + 1 < fieldHeight && x - 1 >= 0) {
+              _arr[y][x].val += +(_arr[y + 1][x - 1].val === -1);
+            }
 
-          if (y + 1 < fieldHeight && x - 1 >= 0) {
-            _arr[y][x].val += +(_arr[y + 1][x - 1].val === -1);
-          }
-
-          if (x - 1 >= 0) {
-            _arr[y][x].val += +(_arr[y][x - 1].val === -1);
+            if (x - 1 >= 0) {
+              _arr[y][x].val += +(_arr[y][x - 1].val === -1);
+            }
           }
         }
       }
-    }
+    });
 
-    this.setState({ field: _arr, imageRatio: _imageRatio });
+    this.setState({ field: _arr, imageRatio: _imageRatio }, () => {
+      console.log("field", this.state.field);
+    });
   }
 
   leftClickHandler = (block) => {
@@ -199,6 +282,16 @@ class App extends Component {
     return _arr;
   };
 
+  // playGame = () => {
+  //   this.setState({playGame: true}, () => {console.log(this.playGame)});
+  //   console.log('clicked');
+  // }
+
+  playGame = () => {
+    console.log('playGame');
+    this.setState({playGame: true});
+  }
+
   render() {
     const {
       field,
@@ -206,27 +299,42 @@ class App extends Component {
       fieldWidth,
       fieldHeight,
       imageWidth,
-      size
+      size,
+      playGame
     } = this.state;
 
+    const _style = {
+      width: fieldWidth * size,
+      height: fieldHeight * size,
+    };
+
     return (
+
       <div className="App">
         {/* header */}
-        <Removed
-          field={field}
-          imageRatio = { imageRatio }
-          fieldWidth = { fieldWidth }
-          fieldHeight = { fieldHeight }
-          imageWidth = { imageWidth }
-          size = { size }
-        />
-{/* 
-        <Field
+
+        { playGame === false ?  <div>
+          <h2  className="white-color">Territory scanned!</h2>
+          <canvas
+            style={_style}
+            ref={this.removed_canvasRef}
+           
+          ></canvas>
+          <button type="button" onClick={this.playGame}> Play game </button>
+        </div> : null }
+
+
+ { playGame === true ?    <Field
           field={field}
           imageRatio={imageRatio}
           leftClickHandler={this.leftClickHandler}
           rightClickHandler={this.rightClickHandler}
-        /> */}
+        /> : null }
+       
+
+      
+
+     
       </div>
     );
   }
