@@ -41,6 +41,26 @@ class FieldBlock extends Component {
 
     // block with numbers
     if (block.val > 0 && block.status === "opened") {
+
+      context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+      const image = new Image();
+      image.src = back_url;
+
+      context.drawImage(
+        image,
+        block.left * imageRatio,
+        block.top * imageRatio,
+        block.size * imageRatio,
+        block.size * imageRatio,
+        5,
+        5,
+        this.canvas.width - 5,
+        this.canvas.width - 5
+      );
+      
+
+
       context.font = (block.size * imageRatio) / 2 + "px Arial";
       context.textAlign = "center";
       context.textBaseline = "middle";

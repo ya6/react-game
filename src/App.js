@@ -1,7 +1,8 @@
 import "./App.css";
-import { Component } from "react";
+import React, { Component } from "react";
 import Field from "./components/field";
 import _random from "./helpers/_random";
+import Removed from "./components/removed";
 
 class App extends Component {
   constructor() {
@@ -15,18 +16,26 @@ class App extends Component {
       currentBlock: {},
       imageRatio: 1,
       imageWidth: 1000,
-      back: new Image(),
-      med_box: new Image(),
-      gameOver: false
+      gameOver: false,
     };
   }
 
   componentDidMount() {
+    console.log("App componentDidMount");
 
-    console.log('App componentDidMount' );
-    //set arr
     const { fieldWidth, fieldHeight, spots, size, imageWidth } = this.state;
 
+    //todo get color
+
+    // const basic_canvasRef = React.createRef();
+
+    // const back = new Image();
+
+    // back.src = back_url;
+
+    // back.addEventListener("load", () => {});
+
+    //set arr
     const _imageRatio = imageWidth / (fieldWidth * size);
     const _arr = [];
 
@@ -42,7 +51,7 @@ class App extends Component {
           left: x * size,
           top: y * size,
           med: false,
-          updated: 0
+          updated: 0,
         };
       }
     }
@@ -93,17 +102,15 @@ class App extends Component {
       }
     }
 
-
     this.setState({ field: _arr, imageRatio: _imageRatio });
   }
 
   leftClickHandler = (block) => {
-
-    let  _gameOver  = this.state.gameOver;
+    let _gameOver = this.state.gameOver;
     const _arr = this.state.field;
 
     if (_gameOver) {
-       return;
+      return;
     }
 
     switch (block.val) {
@@ -120,7 +127,6 @@ class App extends Component {
           }
         }
 
-      
         break;
       case 0:
         this.handleEmptyArea(block, _arr);
@@ -134,10 +140,8 @@ class App extends Component {
     this.setState({ field: _arr, gameOver: _gameOver });
   };
 
-
-
   componentDidUpdate() {
-    console.log('App componentDidUpdate');
+    console.log("App componentDidUpdate");
   }
 
   rightClickHandler = (e, block) => {
@@ -155,7 +159,6 @@ class App extends Component {
   handleEmptyArea = (block, _arr) => {
     _arr[block.y][block.x].status = "opened";
     _arr[block.y][block.x].updated += 1;
-
 
     if (block.y - 1 >= 0) {
       if (
@@ -197,16 +200,33 @@ class App extends Component {
   };
 
   render() {
-const { field, imageRatio } =  this.state;
+    const {
+      field,
+      imageRatio,
+      fieldWidth,
+      fieldHeight,
+      imageWidth,
+      size
+    } = this.state;
 
     return (
       <div className="App">
-        <Field
-          field = { field }
+        {/* header */}
+        <Removed
+          field={field}
           imageRatio = { imageRatio }
-          leftClickHandler = { this.leftClickHandler }
-          rightClickHandler = { this.rightClickHandler }
+          fieldWidth = { fieldWidth }
+          fieldHeight = { fieldHeight }
+          imageWidth = { imageWidth }
+          size = { size }
         />
+{/* 
+        <Field
+          field={field}
+          imageRatio={imageRatio}
+          leftClickHandler={this.leftClickHandler}
+          rightClickHandler={this.rightClickHandler}
+        /> */}
       </div>
     );
   }
