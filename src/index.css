@@ -9,6 +9,7 @@ body {
   position: relative;
   background: #efefef url(./back_binary.jpg) no-repeat fixed top left;
   background-size: cover;
+  
 }
 
 code {

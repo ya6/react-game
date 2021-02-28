@@ -1,19 +1,23 @@
 import "./App.css";
 import React, { Component } from "react";
+import Header from "./components/header";
 import Field from "./components/field";
 import _random from "./helpers/_random";
 import back_url from "./assets/img/dig_bel_2+.png";
 
 class App extends Component {
   state = {
-    fieldWidth: 10,
-    fieldHeight: 8,
+    fieldWidth: 20,
+    fieldHeight: 16,
     size: 50,
-    spots: 10,
+    spots: 0,
     field: [],
     currentBlock: {},
     imageRatio: 1,
     imageWidth: 1000,
+    screenWidth: 0,
+    screenHeight: 0,
+
     playGame: false,
     gameOver: false,
   };
@@ -23,9 +27,21 @@ class App extends Component {
   componentDidMount() {
     console.log("App componentDidMount");
 
-    const { fieldWidth, fieldHeight, spots, size, imageWidth } = this.state;
+    const { fieldWidth, fieldHeight, size, imageWidth } = this.state;
+
+    const _screenWidth = window.innerWidth
+    || document.documentElement.clientWidth
+    || document.body.clientWidth;
+    const _screenHeight =  window.innerHeight
+    || document.documentElement.clientHeight
+    || document.body.clientHeight;
+
+   
 
     const _imageRatio = imageWidth / (fieldWidth * size);
+    const _spots = Math.floor(fieldWidth * fieldHeight * 0.1);
+    console.log(_spots);
+
     //get arr
     const _arr = [];
 
@@ -38,7 +54,10 @@ class App extends Component {
     image.src = back_url;
     image.addEventListener("load", () => {
       context.drawImage(image, 0, 0, canvas.width, canvas.height);
+
+      // step inside
       const compensation = 3;
+
       for (let y = 0; y < fieldHeight; y++) {
         _arr[y] = [];
 
@@ -67,6 +86,18 @@ class App extends Component {
               y * size + size - compensation,
               1,
               1
+            ).data[0] > 0 ||
+            context.getImageData(
+              x * size + compensation,
+              y * size + size / 2 - compensation,
+              1,
+              1
+            ).data[0] > 0 ||
+            context.getImageData(
+              x * size + compensation,
+              y * size + size / 2 - compensation,
+              1,
+              1
             ).data[0] > 0
           ) {
             _arr[y][x] = {
@@ -93,6 +124,18 @@ class App extends Component {
               updated: 0,
             };
           }
+
+          //set num
+          context.font = 20 + "px Arial";
+          context.textAlign = "center";
+          context.textBaseline = "middle";
+          context.fillStyle = "gray";
+
+          context.fillText(
+            String(_arr[y][x].val),
+            x * size + 20,
+            y * size + 20
+          );
 
           context.strokeStyle = "red";
           context.strokeRect(
@@ -127,22 +170,17 @@ class App extends Component {
 
       // set bombs
       let b = 0;
-      while (b < spots) {
-        if (
-          _arr[_random(0, this.state.fieldHeight - 1)][
-            _random(0, this.state.fieldWidth - 1)
-          ].val !== -2 ||
-          _arr[_random(0, this.state.fieldHeight - 1)][
-            _random(0, this.state.fieldWidth - 1)
-          ].val !== -1
-        ) {
+      console.log("spots", this.state.spots);
+      while (b < _spots) {
+        const _y = _random(0, fieldHeight - 1);
+        const _x = _random(0, fieldWidth - 1);
+
+        if (_arr[_y][_x].val !== -2 && _arr[_y][_x].val !== -1) {
           b += 1;
-          //  console.log(b);
-          _arr[_random(0, this.state.fieldHeight - 1)][
-            _random(0, this.state.fieldWidth - 1)
-          ].val = -1;
+          _arr[_y][_x].val = -1;
         }
       }
+
       // set other blocks
       for (let y = 0; y < fieldHeight; y++) {
         for (let x = 0; x < fieldWidth; x++) {
@@ -183,9 +221,19 @@ class App extends Component {
       }
     });
 
-    this.setState({ field: _arr, imageRatio: _imageRatio }, () => {
-      console.log("field", this.state.field);
-    });
+    //set base state
+    //
+    //
+
+    this.setState(
+      {
+        field: _arr,
+        imageRatio: _imageRatio,
+        spots: _spots,
+        screenWidth: _screenWidth,
+        screenHeight: _screenHeight
+      }
+    );
   }
 
   leftClickHandler = (block) => {
@@ -282,15 +330,10 @@ class App extends Component {
     return _arr;
   };
 
-  // playGame = () => {
-  //   this.setState({playGame: true}, () => {console.log(this.playGame)});
-  //   console.log('clicked');
-  // }
-
   playGame = () => {
-    console.log('playGame');
-    this.setState({playGame: true});
-  }
+    console.log("playGame");
+    this.setState({ playGame: true });
+  };
 
   render() {
     const {
@@ -298,43 +341,52 @@ class App extends Component {
       imageRatio,
       fieldWidth,
       fieldHeight,
-      imageWidth,
       size,
-      playGame
+      playGame,
+      screenWidth,
+      screenHeight
     } = this.state;
 
-    const _style = {
-      width: fieldWidth * size,
-      height: fieldHeight * size,
+    let _style = null;
+
+   if (screenHeight > screenWidth) {   
+     _style = {
+      width:(screenWidth * 0.8),
+      height: (screenWidth * 0.8)/1.25,
     };
+  } else {  _style = {
+    width:(screenHeight * 0.7)*1.25,
+    height: (screenHeight * 0.7),
+  };}
+
+   
 
     return (
-
       <div className="App">
-        {/* header */}
+        <Header />
 
-        { playGame === false ?  <div>
-          <h2  className="white-color">Territory scanned!</h2>
-          <canvas
-            style={_style}
-            ref={this.removed_canvasRef}
-           
-          ></canvas>
-          <button type="button" onClick={this.playGame}> Play game </button>
-        </div> : null }
+        {playGame === false ? (
+          <div className="canvas-block">
+            <h2 className="text-white">Territory scanned!</h2>
+            <canvas style={_style} ref={this.removed_canvasRef}></canvas>
+            <button type="button" onClick={this.playGame}>
+              {" "}
+              Play game{" "}
+            </button>
+          </div>
+        ) : null}
 
-
- { playGame === true ?    <Field
-          field={field}
-          imageRatio={imageRatio}
-          leftClickHandler={this.leftClickHandler}
-          rightClickHandler={this.rightClickHandler}
-        /> : null }
-       
-
-      
-
-     
+        {playGame === true ? (
+          <Field
+            field={field}
+            size={size}
+            fieldWidth={fieldWidth}
+            fieldHeight={fieldHeight}
+            imageRatio={imageRatio}
+            leftClickHandler={this.leftClickHandler}
+            rightClickHandler={this.rightClickHandler}
+          />
+        ) : null}
       </div>
     );
   }

@@ -8,6 +8,7 @@ class FieldBlock extends Component {
   ["canvasRef"] = React.createRef();
   canvas = null;
   context = null;
+  compensation = 0;
 
   componentDidMount() {
     const { block, imageRatio } = this.props;
@@ -26,10 +27,10 @@ class FieldBlock extends Component {
         block.top * imageRatio,
         block.size * imageRatio,
         block.size * imageRatio,
-        5,
-        5,
-        this.canvas.width - 5,
-        this.canvas.width - 5
+        this.compensation,
+        this.compensation,
+        this.canvas.width - this.compensation,
+        this.canvas.width - this.compensation
       );
     });
   }
@@ -39,130 +40,100 @@ class FieldBlock extends Component {
     const { block, imageRatio } = this.props;
     const context = this.canvas.getContext("2d");
 
-    // block with numbers
-    if (block.val > 0 && block.status === "opened") {
+    const image = new Image();
+    image.src = back_url;
 
-      context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    image.addEventListener("load", () => {
+      // block with numbers
+      if (block.val > 0 && block.status === "opened") {
+        context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-      const image = new Image();
-      image.src = back_url;
-
-      context.drawImage(
-        image,
-        block.left * imageRatio,
-        block.top * imageRatio,
-        block.size * imageRatio,
-        block.size * imageRatio,
-        5,
-        5,
-        this.canvas.width - 5,
-        this.canvas.width - 5
-      );
-      
-
-
-      context.font = (block.size * imageRatio) / 2 + "px Arial";
-      context.textAlign = "center";
-      context.textBaseline = "middle";
-      context.fillStyle = "black";
-      context.shadowColor = "#bfbfbf";
-      context.shadowOffsetX = 3;
-      context.shadowOffsetY = 3;
-      context.shadowBlur = 3;
-      context.fillText(String(block.val), 50, 50);
-    }
-
-    //block empty
-    if (block.val === 0 && block.status === "opened") {
-      context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
-      const image = new Image();
-      image.src = back_url;
-
-      context.filter = "contrast(150%)";
-
-      context.drawImage(
-        image,
-        block.left * imageRatio,
-        block.top * imageRatio,
-        block.size * imageRatio,
-        block.size * imageRatio,
-        5,
-        5,
-        this.canvas.width - 5,
-        this.canvas.width - 5
-      );
-    }
-
-    //blok boom
-
-    if (block.val === -1 && block.status === "blow") {
-      const molecule = new Image();
-      molecule.src = c19;
-
-      molecule.addEventListener("load", () => {
         context.drawImage(
-          molecule,
-          0,
-          0,
-          this.canvas.width,
-          this.canvas.height
+          image,
+          block.left * imageRatio,
+          block.top * imageRatio,
+          block.size * imageRatio,
+          block.size * imageRatio,
+          this.compensation,
+          this.compensation,
+          this.canvas.width - this.compensation,
+          this.canvas.width - this.compensation
         );
-      });
-    }
 
-    //block select for med
-    if (block.status === "hidden" && block.med) {
-      const med = new Image();
-      med.src = med_box;
+        context.font = block.size + "px Arial";
+        context.textAlign = "center";
+        context.textBaseline = "middle";
+        context.fillStyle = "black";
+        context.shadowColor = "#bfbfbf";
+        context.shadowOffsetX = 3;
+        context.shadowOffsetY = 3;
+        context.shadowBlur = 3;
+        context.fillText(String(block.val), 50, 50);
+      }
 
-      med.addEventListener("load", () => {
-        context.drawImage(med, 0, 0, this.canvas.width, this.canvas.height);
-      });
-    }
+      //block empty
+      if (block.val === 0 && block.status === "opened") {
+        context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-    if (block.status === "hidden" && !block.med) {
-      context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        context.filter = "contrast(200%)";
 
-      const image = new Image();
-      image.src = back_url;
+        context.drawImage(
+          image,
+          block.left * imageRatio,
+          block.top * imageRatio,
+          block.size * imageRatio,
+          block.size * imageRatio,
+          this.compensation,
+          this.compensation,
+          this.canvas.width - this.compensation,
+          this.canvas.width - this.compensation
+        );
+      }
 
-      context.drawImage(
-        image,
-        block.left * imageRatio,
-        block.top * imageRatio,
-        block.size * imageRatio,
-        block.size * imageRatio,
-        5,
-        5,
-        this.canvas.width - 5,
-        this.canvas.width - 5
-      );
-    }
+      //blok boom
+      if (block.val === -1 && block.status === "blow") {
+        const molecule = new Image();
+        molecule.src = c19;
+
+        molecule.addEventListener("load", () => {
+          context.drawImage(
+            molecule,
+            0,
+            0,
+            this.canvas.width,
+            this.canvas.height
+          );
+        });
+      }
+
+      //block select for med
+      if (block.status === "hidden" && block.med) {
+        const med = new Image();
+        med.src = med_box;
+
+        med.addEventListener("load", () => {
+          context.drawImage(med, 0, 0, this.canvas.width, this.canvas.height);
+        });
+      }
+
+      //block unselect for med
+      if (block.status === "hidden" && !block.med) {
+        context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+        context.drawImage(
+          image,
+          block.left * imageRatio,
+          block.top * imageRatio,
+          block.size * imageRatio,
+          block.size * imageRatio,
+          this.compensation,
+          this.compensation,
+          this.canvas.width - this.compensation,
+          this.canvas.width - this.compensation
+        );
+      }
+    });
   }
-
-  updateCanvas = (block, imageRatio) => {
-   // console.log("updateCanvas");
-
-    const context = this.canvas.getContext("2d");
-
-    if (block.val > 0) {
-      context.font = (block.size * imageRatio) / 2 + "px Arial";
-      context.textAlign = "center";
-      context.textBaseline = "middle";
-      context.fillStyle = "black";
-      context.shadowColor = "#bfbfbf";
-      context.shadowOffsetX = 3;
-      context.shadowOffsetY = 3;
-      context.shadowBlur = 3;
-      context.fillText(String(block.val), 50, 50);
-    }
-
-    if (block.val === 0) {
-      context.fillStyle = "#deffff";
-      context.fillRect(5, 5, this.canvas.width - 5, this.canvas.height - 5);
-    }
-  };
 
   render() {
     const { block, leftClickHandler, rightClickHandler } = this.props;
