@@ -53,7 +53,7 @@ class App extends Component {
 
    
 
-    const _imageRatio = imageWidth / (fieldWidth * size);
+    //const _imageRatio = imageWidth / (fieldWidth * size);
    // const _spots = Math.floor(fieldWidth * fieldHeight * 0.1);
    
 
@@ -66,10 +66,11 @@ class App extends Component {
     this.setState(
       {
        
-        imageRatio: _imageRatio,
+       
      
         screenWidth: _screenWidth,
-        screenHeight: _screenHeight
+        screenHeight: _screenHeight,
+      
       }
     );
   }
@@ -77,8 +78,9 @@ class App extends Component {
   setNewField = () => {
      //get arr
 
-     const {fieldWidth, fieldHeight, size} = this.state;
+     const {fieldWidth, fieldHeight, size, imageWidth} = this.state;
      const _spots = Math.floor(fieldWidth * fieldHeight * 0.1);
+     const _imageRatio = imageWidth / (fieldWidth * size);
      const _arr = [];
 
      const canvas = this.removed_canvasRef.current;
@@ -259,7 +261,9 @@ class App extends Component {
        }
      });
 
-this.setState({field: _arr, spots: _spots,});
+
+
+this.setState({field: _arr, spots: _spots, imageRatio: _imageRatio});
 
   }
 
