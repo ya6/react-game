@@ -4,6 +4,7 @@ import Header from "./components/header";
 import Field from "./components/field";
 import _random from "./helpers/_random";
 import back_url from "./assets/img/dig_bel_2+.png";
+import ButtonPlay from "./components/button-play";
 import Footer from "./components/footer";
 
 class App extends Component {
@@ -21,6 +22,8 @@ class App extends Component {
     screenWidth: 0,
     screenHeight: 0,
     screenRatio: 1,
+
+    scanReady: false,
 
     playGame: false,
     gameOver: false,
@@ -61,7 +64,6 @@ class App extends Component {
   }
 
   setNewField = () => {
-   
     //get arr
     const { fieldWidth, fieldHeight, size, imageWidth } = this.state;
 
@@ -94,8 +96,42 @@ class App extends Component {
         _arr[y] = [];
 
         for (let x = 0; x < fieldWidth; x++) {
+          setTimeout(() => {
+            context.strokeStyle = "red";
+            context.strokeRect(
+              x * size + compensation,
+              y * size + compensation,
+              1,
+              1
+            );
+            context.strokeStyle = "green";
+            context.strokeRect(
+              x * size + compensation,
+              y * size + size - compensation,
+              1,
+              1
+            );
+            context.strokeStyle = "blue";
+            context.strokeRect(
+              x * size + size - compensation,
+              y * size + compensation,
+              1,
+              1
+            );
+            context.strokeStyle = "orange";
+            context.strokeRect(
+              x * size + size - compensation,
+              y * size + size - compensation,
+              1,
+              1
+            );
 
-          
+
+            setTimeout(() => {this.setState({scanReady: true});}, 800)
+      
+        
+          }, 800);
+
           if (
             context.getImageData(
               x * size + compensation,
@@ -170,35 +206,6 @@ class App extends Component {
           //    x * size + 20,
           //    y * size + 20
           //  );
-
-          context.strokeStyle = "red";
-          context.strokeRect(
-            x * size + compensation,
-            y * size + compensation,
-            1,
-            1
-          );
-          context.strokeStyle = "green";
-          context.strokeRect(
-            x * size + compensation,
-            y * size + size - compensation,
-            1,
-            1
-          );
-          context.strokeStyle = "blue";
-          context.strokeRect(
-            x * size + size - compensation,
-            y * size + compensation,
-            1,
-            1
-          );
-          context.strokeStyle = "orange";
-          context.strokeRect(
-            x * size + size - compensation,
-            y * size + size - compensation,
-            1,
-            1
-          );
         }
       }
 
@@ -272,6 +279,7 @@ class App extends Component {
       imageRatio: _imageRatio,
       screenRatio: _screenRatio,
       gameOver: false,
+     
     });
   };
 
@@ -282,7 +290,7 @@ class App extends Component {
   }
 
   leftClickHandler = (block) => {
-    //  console.log('leftClickHandler');
+
     let _gameOver = this.state.gameOver;
     const _arr = this.state.field;
 
@@ -382,7 +390,7 @@ class App extends Component {
     return _arr;
   };
 
-  playGame = () => {
+  playNewGame = () => {
     this.setState({ playGame: true });
   };
 
@@ -404,9 +412,10 @@ class App extends Component {
       screenHeight,
       field_size_factor,
       screenRatio,
+      scanReady,
     } = this.state;
 
-    let _style = null;
+    let _style;
 
     if (screenHeight > screenWidth) {
       _style = {
@@ -415,8 +424,8 @@ class App extends Component {
       };
     } else {
       _style = {
-        width: screenHeight * 0.65 * 1.25,
-        height: screenHeight * 0.65,
+        width: screenHeight * 0.60 * 1.25,
+        height: screenHeight * 0.60,
       };
     }
 
@@ -436,10 +445,9 @@ class App extends Component {
         {playGame === false ? (
           <div className="canvas-block">
             <canvas style={_style} ref={this.removed_canvasRef}></canvas>
-            <h2 className="text-white">Territory scanned!</h2>
-            <button type="button" onClick={this.playGame}>
-              Play Game
-            </button>
+            <div className="button-container">
+              {scanReady ? <ButtonPlay playNewGame={this.playNewGame} /> : null}
+            </div>
           </div>
         ) : null}
 

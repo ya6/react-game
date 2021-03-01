@@ -9,7 +9,7 @@ const Footer = (props) => {
     width: fieldWidth * size * screenRatio,
   };
   return (
-    <div className="header-footer" style={_style}>
+    <div className="footer" style={_style}>
       <div className="d-flex d-f-just-content-center  mt-1" >
           
         <div className="d-flex">

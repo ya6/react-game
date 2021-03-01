@@ -18,7 +18,7 @@ const Header = (props) => {
   };
   
   return (
-    <div className="header-footer" style={_style}>
+    <div className="header" style={_style}>
       <h2 className="text-lime">C19-Sweeper (сапер)</h2>
       <div className="header-setting-container">
         <select  value={field_size_factor} onChange={fieldSizeHandler}>
