@@ -1,6 +1,47 @@
-.header {
-    width: 100%;
-    height: 150px;
+.header-footer {
+    /* width: 100%; */
+   padding-bottom: 1rem;
     /* border: 1px solid greenyellow; */
-    background: rgba(0,0,0, 0.5);
+    background: rgba(0,0,0, 0.4);
+    box-sizing: border-box;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
 }
+
+h2 {
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+
+   
+}
+
+
+.header-setting-container {
+    display: flex;
+    justify-content: space-around;
+}
+
+.header-setting-container img {
+  width: 2rem;
+}
+
+.header-setting-container--box {
+    width: 3rem;
+    height: 1.9rem;
+    margin: 0 0.5rem;
+    
+    background: rgb(240, 240, 240);
+
+}
+.d-flex {
+
+
+    display: flex;
+    
+    align-items:center
+}
+
+.d-f-just-content-space-around {
+    justify-content: space-around;
+}
+

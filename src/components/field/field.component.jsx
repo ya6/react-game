@@ -30,7 +30,7 @@ const Field = ( { field, fieldWidth, fieldHeight, size, rightClickHandler,
     }
    
     const _style = {
-        width: fieldWidth * size* screenRatio,
+        width: fieldWidth * size * screenRatio,
         height: fieldHeight * size * screenRatio,
       };
 

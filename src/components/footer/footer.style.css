@@ -1,0 +1,36 @@
+
+.github {
+
+	width: 30px;
+	height: 30px;
+	
+
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center center;
+	padding: 2px;
+
+}
+
+.rsschool {
+
+	width: 80px;
+	height: 30px;
+
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center center;
+	padding: 2px;
+
+
+}
+
+.d-f-just-content-center {
+    justify-content: center;
+
+}
+
+a {
+    color: white;
+    text-decoration: none;
+    margin-right: 1rem }

@@ -4,6 +4,7 @@ import Header from "./components/header";
 import Field from "./components/field";
 import _random from "./helpers/_random";
 import back_url from "./assets/img/dig_bel_2+.png";
+import Footer from "./components/footer";
 
 class App extends Component {
   state = {
@@ -27,8 +28,7 @@ class App extends Component {
   removed_canvasRef = React.createRef();
 
   fieldSizeHandler = (e) => {
-    console.log("fieldSizeHandler ", e.target.value);
-
+ 
     const _field_size_factor = e.target.value;
 
     const _fieldWidth = _field_size_factor * 5;
@@ -43,8 +43,7 @@ class App extends Component {
   };
 
   componentDidMount() {
-    console.log("App componentDidMount");
-
+  
     const _screenWidth =
       window.innerWidth ||
       document.documentElement.clientWidth ||
@@ -54,11 +53,7 @@ class App extends Component {
       document.documentElement.clientHeight ||
       document.body.clientHeight;
 
-     
-
     this.setNewField();
-
-    
 
     this.setState({
       screenWidth: _screenWidth,
@@ -70,8 +65,7 @@ class App extends Component {
     //get arr
 
     const { fieldWidth, fieldHeight, size, imageWidth } = this.state;
-    
-    
+
     const _screenWidth =
       window.innerWidth ||
       document.documentElement.clientWidth ||
@@ -81,7 +75,6 @@ class App extends Component {
       document.documentElement.clientHeight ||
       document.body.clientHeight;
 
-    
     const _spots = Math.floor(fieldWidth * fieldHeight * 0.1);
     const _imageRatio = imageWidth / (fieldWidth * size);
     const _arr = [];
@@ -211,7 +204,6 @@ class App extends Component {
 
       // set bombs
       let b = 0;
-      console.log("spots", this.state.spots);
       while (b < _spots) {
         const _y = _random(0, fieldHeight - 1);
         const _x = _random(0, fieldWidth - 1);
@@ -261,46 +253,39 @@ class App extends Component {
         }
       }
     });
- 
-         
-    //set main map blok size ratio
-      console.log('_screenWidth',_screenWidth);
-      console.log('_screenHeight', _screenHeight);
-      //1024×768_screenWidth
-      const _safe_width = _screenWidth - _screenWidth * 0.1;  
-      const _safe_height = _screenHeight - _screenHeight * 0.1 - 150;
-    
-      console.log('_safe_width',_safe_width);
-      console.log('_safe_height', _safe_height);
-    
-      const _x_screenRatio = (_safe_width / (fieldWidth * size)).toFixed(1);
-    
-      const _y_screenRatio = (_safe_height / (fieldHeight * size)).toFixed(1);
-      console.log("x y", _x_screenRatio, _y_screenRatio);
-    
-      const _screenRatio = _x_screenRatio <= _y_screenRatio ? _x_screenRatio : _y_screenRatio
-    console.log('_screenRatio !!',_screenRatio);
-     ;
-    
 
-    this.setState({ field: _arr, spots: _spots, imageRatio: _imageRatio,
-       screenRatio: _screenRatio });
+    //set main map blok size ratio
+  
+    const _safe_width = _screenWidth - _screenWidth * 0.1;
+    const _safe_height = _screenHeight - _screenHeight * 0.1 - 150;
+
+    const _x_screenRatio = (_safe_width / (fieldWidth * size)).toFixed(1);
+
+    const _y_screenRatio = (_safe_height / (fieldHeight * size)).toFixed(1);
+   
+
+    const _screenRatio =
+      _x_screenRatio <= _y_screenRatio ? _x_screenRatio : _y_screenRatio;
+
+    this.setState({
+      field: _arr,
+      spots: _spots,
+      imageRatio: _imageRatio,
+      screenRatio: _screenRatio,
+      gameOver: false
+
+    });
   };
 
   componentDidUpdate(prevProps, prevState) {
-    console.log(
-      "App componentDidUpdate",
-      prevState.field_size_factor,
-      this.state.field_size_factor,
-      this.state.fieldWidth
-    );
+  
     if (prevState.field_size_factor !== this.state.field_size_factor) {
       this.setNewField();
     }
-
   }
 
   leftClickHandler = (block) => {
+  //  console.log('leftClickHandler');
     let _gameOver = this.state.gameOver;
     const _arr = this.state.field;
 
@@ -310,8 +295,7 @@ class App extends Component {
 
     switch (block.val) {
       case -1:
-        console.log("boom");
-
+       
         _gameOver = true;
 
         for (let y = 0; y < _arr.length; y++) {
@@ -336,10 +320,15 @@ class App extends Component {
   };
 
   rightClickHandler = (e, block) => {
-    e.preventDefault();
-    console.log("rightClickHandler", block);
+   
+    const _gameOver = this.state.gameOver;
 
-    const _arr = this.state.field;
+    if (_gameOver) {
+      return;
+    }
+
+    e.preventDefault();
+       const _arr = this.state.field;
     _arr[block.y][block.x].med = _arr[block.y][block.x].med
       ? (_arr[block.y][block.x].med = false)
       : (_arr[block.y][block.x].med = true);
@@ -391,7 +380,6 @@ class App extends Component {
   };
 
   playGame = () => {
-    console.log("playGame");
     this.setState({ playGame: true });
   };
 
@@ -402,6 +390,7 @@ class App extends Component {
       fieldWidth,
       fieldHeight,
       size,
+      spots,
       playGame,
       screenWidth,
       screenHeight,
@@ -418,25 +407,28 @@ class App extends Component {
       };
     } else {
       _style = {
-        width: screenHeight * 0.7 * 1.25,
-        height: screenHeight * 0.7,
+        width: screenHeight * 0.65 * 1.25,
+        height: screenHeight * 0.65,
       };
     }
 
     return (
       <div className="App">
         <Header
+          fieldWidth={fieldWidth}
+          size={size}
+          spots = {spots}
+          screenRatio={screenRatio}
           field_size_factor={field_size_factor}
           fieldSizeHandler={this.fieldSizeHandler}
         />
 
         {playGame === false ? (
           <div className="canvas-block">
-            <h2 className="text-white">Territory scanned!</h2>
             <canvas style={_style} ref={this.removed_canvasRef}></canvas>
-            <button type="button" onClick={this.playGame}>
-              {" "}
-              Play game{" "}
+            <h2 className="text-white">Territory scanned!</h2>
+            <button type="button" onClick={this.playGame}>      
+              Play Game
             </button>
           </div>
         ) : null}
@@ -453,6 +445,10 @@ class App extends Component {
             rightClickHandler={this.rightClickHandler}
           />
         ) : null}
+        <Footer
+          size={size}
+          fieldWidth={fieldWidth}
+          screenRatio={screenRatio} />
       </div>
     );
   }
