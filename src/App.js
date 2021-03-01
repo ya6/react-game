@@ -4,6 +4,8 @@ import Header from "./components/header";
 import Field from "./components/field";
 import _random from "./helpers/_random";
 import back_url from "./assets/img/dig_bel_2+.png";
+// import back_url from "./assets/img/vini.png";
+
 import ButtonPlay from "./components/button-play";
 import Footer from "./components/footer";
 
@@ -263,7 +265,7 @@ class App extends Component {
     //set main map blok size ratio
 
     const _safe_width = _screenWidth - _screenWidth * 0.1;
-    const _safe_height = _screenHeight - _screenHeight * 0.1 - 150;
+    const _safe_height = _screenHeight - _screenHeight * 0.1 - 180;
 
     const _x_screenRatio = (_safe_width / (fieldWidth * size)).toFixed(1);
 
@@ -438,8 +440,8 @@ class App extends Component {
       };
     } else {
       _style = {
-        width: screenHeight * 0.6 * 1.25,
-        height: screenHeight * 0.6,
+        width: screenHeight * 0.55 * 1.25,
+        height: screenHeight * 0.55,
       };
     }
 

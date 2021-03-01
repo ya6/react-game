@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import "./field-block.style.css";
 import back_url from "../../assets/img/dig_bel_2+.png";
+// import back_url from '../../assets/img/vini.png';
+
 import med_box from "../../assets/img/med_box.png";
 import c19 from "../../assets/img/c19.png";
 

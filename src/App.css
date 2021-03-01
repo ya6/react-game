@@ -28,8 +28,11 @@
   border: 1px solid yellowgreen;
 }
  .button-container {
-   height: 5rem;
+   height: 6rem;
    /* border: 1px solid red; */
  }
 
- h3 { margin-top: 0;}
+ h3 { margin-top: 0;
+  margin-bottom: 0.1rem;
+}
+p {margin: 0.5rem;}
