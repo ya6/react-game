@@ -22,13 +22,13 @@ h2 {
 }
 
 .header-setting-container img {
-  width: 2rem;
+  height: 2rem;
 }
 
 .header-setting-container--box {
     width: 3rem;
     height: 1.9rem;
-    margin: 0 0.5rem;
+    margin-left: 0.5rem;
     
     background: rgb(240, 240, 240);
 
@@ -39,9 +39,18 @@ h2 {
     display: flex;
     
     align-items:center
+    
 }
 
 .d-f-just-content-space-around {
     justify-content: space-around;
 }
+
+.button {
+    height: 3rem;
+}
+
+
+
+.mt-1 {margin-top: 0.5rem}
 

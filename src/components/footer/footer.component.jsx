@@ -9,8 +9,8 @@ const Footer = (props) => {
     width: fieldWidth * size * screenRatio,
   };
   return (
-    <div className="header-footer text-white" style={_style}>
-      <div className="d-flex  d-f-just-content-center" >
+    <div className="header-footer" style={_style}>
+      <div className="d-flex d-f-just-content-center  mt-1" >
           
         <div className="d-flex">
           <img className="github" src={github_logo} alt="github_logo" />
@@ -26,7 +26,7 @@ const Footer = (props) => {
           </a>
         </div>
 
-        <div className="d-flex">
+        <div className="d-flex text-white">
           <div>
             <strong>2021</strong>
           </div>
