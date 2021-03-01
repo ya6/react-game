@@ -126,10 +126,9 @@ class App extends Component {
               1
             );
 
-
-            setTimeout(() => {this.setState({scanReady: true});}, 800)
-      
-        
+            setTimeout(() => {
+              this.setState({ scanReady: true });
+            }, 800);
           }, 800);
 
           if (
@@ -279,7 +278,6 @@ class App extends Component {
       imageRatio: _imageRatio,
       screenRatio: _screenRatio,
       gameOver: false,
-     
     });
   };
 
@@ -290,7 +288,6 @@ class App extends Component {
   }
 
   leftClickHandler = (block) => {
-
     let _gameOver = this.state.gameOver;
     const _arr = this.state.field;
 
@@ -317,10 +314,21 @@ class App extends Component {
 
       default:
         _arr[block.y][block.x].status = "opened";
+        _arr[block.y][block.x].med = false;
         break;
     }
 
-    this.setState({ field: _arr, gameOver: _gameOver });
+    let _med_boxes = 0;
+
+    for (let y = 0; y < _arr.length; y++) {
+      for (let x = 0; x < _arr.length; x++) {
+        if (_arr[y][x].med) {
+          _med_boxes += 1;
+        }
+      }
+    }
+
+    this.setState({ field: _arr, gameOver: _gameOver, med_boxes: _med_boxes });
   };
 
   rightClickHandler = (e, block) => {
@@ -334,22 +342,28 @@ class App extends Component {
 
     const _arr = this.state.field;
 
-    let _med_boxes = this.state.med_boxes;
-
     //predState
-    _med_boxes =
-      _arr[block.y][block.x].med === true ? _med_boxes - 1 : _med_boxes + 1;
 
     _arr[block.y][block.x].med = _arr[block.y][block.x].med
       ? (_arr[block.y][block.x].med = false)
       : (_arr[block.y][block.x].med = true);
+
+    let _med_boxes = 0;
+
+    for (let y = 0; y < _arr.length; y++) {
+      for (let x = 0; x < _arr.length; x++) {
+        if (_arr[y][x].med) {
+          _med_boxes += 1;
+        }
+      }
+    }
 
     this.setState({ field: _arr, med_boxes: _med_boxes });
   };
 
   handleEmptyArea = (block, _arr) => {
     _arr[block.y][block.x].status = "opened";
-    _arr[block.y][block.x].updated += 1;
+    _arr[block.y][block.x].med = false;
 
     if (block.y - 1 >= 0) {
       if (
@@ -424,8 +438,8 @@ class App extends Component {
       };
     } else {
       _style = {
-        width: screenHeight * 0.60 * 1.25,
-        height: screenHeight * 0.60,
+        width: screenHeight * 0.6 * 1.25,
+        height: screenHeight * 0.6,
       };
     }
 
