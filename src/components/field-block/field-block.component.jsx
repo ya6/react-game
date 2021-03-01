@@ -11,14 +11,14 @@ class FieldBlock extends Component {
   compensation = 0;
 
   componentDidMount() {
-    const { block, imageRatio } = this.props;
+    const { block, imageRatio, screenRatio } = this.props;
     const image = new Image();
     image.src = back_url;
 
     image.addEventListener("load", () => {
       this.canvas = this["canvasRef"].current;
       this.context = this.canvas.getContext("2d");
-      this.canvas.width = "100";
+      this.canvas.width = "100" ;
       this.canvas.height = "100";
 
       this.context.drawImage(
@@ -136,13 +136,13 @@ class FieldBlock extends Component {
   }
 
   render() {
-    const { block, leftClickHandler, rightClickHandler } = this.props;
+    const { block, leftClickHandler, rightClickHandler, screenRatio } = this.props;
 
     const _style = {
-      width: block.size,
-      height: block.size,
-      left: block.left,
-      top: block.top,
+      width: block.size*screenRatio,
+      height: block.size* screenRatio,
+      left: block.left*screenRatio,
+      top: block.top*screenRatio,
     };
 
     return (

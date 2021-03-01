@@ -2,7 +2,8 @@ import "./field.style.css";
 import FieldBlock from '../field-block'
 
 
-const Field = ( { field, fieldWidth, fieldHeight, size, rightClickHandler, leftClickHandler, imageRatio,  back, med_box }) => {
+const Field = ( { field, fieldWidth, fieldHeight, size, rightClickHandler,
+     leftClickHandler, imageRatio, screenRatio,  back, med_box }) => {
 
     const blocks = [];
  
@@ -17,6 +18,7 @@ const Field = ( { field, fieldWidth, fieldHeight, size, rightClickHandler, leftC
                 imageRatio = { imageRatio }
                 back = { back}
                 med_box = { med_box }
+                screenRatio = { screenRatio }
                 rightClickHandler = { rightClickHandler }
                 leftClickHandler = { leftClickHandler } />);  
                 
@@ -28,8 +30,8 @@ const Field = ( { field, fieldWidth, fieldHeight, size, rightClickHandler, leftC
     }
    
     const _style = {
-        width: fieldWidth * size + 10,
-        height: fieldHeight * size + 10,
+        width: fieldWidth * size* screenRatio,
+        height: fieldHeight * size * screenRatio,
       };
 
 

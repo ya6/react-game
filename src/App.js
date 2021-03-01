@@ -18,6 +18,7 @@ class App extends Component {
     imageWidth: 1000,
     screenWidth: 0,
     screenHeight: 0,
+    screenRatio: 1,
 
     playGame: false,
     gameOver: false,
@@ -25,256 +26,278 @@ class App extends Component {
 
   removed_canvasRef = React.createRef();
 
-
   fieldSizeHandler = (e) => {
-    console.log('fieldSizeHandler ', e.target.value);
+    console.log("fieldSizeHandler ", e.target.value);
 
-    const _field_size_factor =   e.target.value;
+    const _field_size_factor = e.target.value;
 
     const _fieldWidth = _field_size_factor * 5;
     const _fieldHeight = _field_size_factor * 4;
 
-    this.setState( { fieldWidth: _fieldWidth,
+    this.setState({
+      fieldWidth: _fieldWidth,
       fieldHeight: _fieldHeight,
-      field_size_factor: _field_size_factor } );
-  }
+      field_size_factor: _field_size_factor,
+      playGame: false,
+    });
+  };
 
   componentDidMount() {
     console.log("App componentDidMount");
 
-    const { fieldWidth, fieldHeight, size, imageWidth } = this.state;
+    const _screenWidth =
+      window.innerWidth ||
+      document.documentElement.clientWidth ||
+      document.body.clientWidth;
+    const _screenHeight =
+      window.innerHeight ||
+      document.documentElement.clientHeight ||
+      document.body.clientHeight;
 
-    const _screenWidth = window.innerWidth
-    || document.documentElement.clientWidth
-    || document.body.clientWidth;
-    const _screenHeight =  window.innerHeight
-    || document.documentElement.clientHeight
-    || document.body.clientHeight;
-
-   
-
-    //const _imageRatio = imageWidth / (fieldWidth * size);
-   // const _spots = Math.floor(fieldWidth * fieldHeight * 0.1);
-   
+     
 
     this.setNewField();
 
-    //set base state
-    //
-    //
+    
 
-    this.setState(
-      {
-       
-       
-     
-        screenWidth: _screenWidth,
-        screenHeight: _screenHeight,
-      
-      }
-    );
+    this.setState({
+      screenWidth: _screenWidth,
+      screenHeight: _screenHeight,
+    });
   }
 
   setNewField = () => {
-     //get arr
+    //get arr
 
-     const {fieldWidth, fieldHeight, size, imageWidth} = this.state;
-     const _spots = Math.floor(fieldWidth * fieldHeight * 0.1);
-     const _imageRatio = imageWidth / (fieldWidth * size);
-     const _arr = [];
+    const { fieldWidth, fieldHeight, size, imageWidth } = this.state;
+    
+    
+    const _screenWidth =
+      window.innerWidth ||
+      document.documentElement.clientWidth ||
+      document.body.clientWidth;
+    const _screenHeight =
+      window.innerHeight ||
+      document.documentElement.clientHeight ||
+      document.body.clientHeight;
 
-     const canvas = this.removed_canvasRef.current;
-     const context = canvas.getContext("2d");
-     canvas.width = fieldWidth * size;
-     canvas.height = fieldHeight * size;
- 
-     const image = new Image();
-     image.src = back_url;
-     image.addEventListener("load", () => {
- 
- 
-       context.drawImage(image, 0, 0, canvas.width, canvas.height);
- 
-       // step inside
-       const compensation = 3;
- 
-       for (let y = 0; y < fieldHeight; y++) {
-         _arr[y] = [];
- 
-         for (let x = 0; x < fieldWidth; x++) {
-           if (
-             context.getImageData(
-               x * size + compensation,
-               y * size + compensation,
-               1,
-               1
-             ).data[0] > 0 ||
-             context.getImageData(
-               x * size + compensation,
-               y * size + size + compensation,
-               1,
-               1
-             ).data[0] > 0 ||
-             context.getImageData(
-               x * size + size - compensation,
-               y * size + compensation,
-               1,
-               1
-             ).data[0] > 0 ||
-             context.getImageData(
-               x * size + size - compensation,
-               y * size + size - compensation,
-               1,
-               1
-             ).data[0] > 0 ||
-             context.getImageData(
-               x * size + compensation,
-               y * size + size / 2 - compensation,
-               1,
-               1
-             ).data[0] > 0 ||
-             context.getImageData(
-               x * size + compensation,
-               y * size + size / 2 - compensation,
-               1,
-               1
-             ).data[0] > 0
-           ) {
-             _arr[y][x] = {
-               val: 0,
-               status: "hidden",
-               y: y,
-               x: x,
-               size: size,
-               left: x * size,
-               top: y * size,
-               med: false,
-               updated: 0,
-             };
-           } else {
-             _arr[y][x] = {
-               val: -2,
-               status: "hidden",
-               y: y,
-               x: x,
-               size: size,
-               left: x * size,
-               top: y * size,
-               med: false,
-               updated: 0,
-             };
-           }
- 
-           //set num
-           context.font = 20 + "px Arial";
-           context.textAlign = "center";
-           context.textBaseline = "middle";
-           context.fillStyle = "gray";
- 
-           context.fillText(
-             String(_arr[y][x].val),
-             x * size + 20,
-             y * size + 20
-           );
- 
-           context.strokeStyle = "red";
-           context.strokeRect(
-             x * size + compensation,
-             y * size + compensation,
-             1,
-             1
-           );
-           context.strokeStyle = "green";
-           context.strokeRect(
-             x * size + compensation,
-             y * size + size - compensation,
-             1,
-             1
-           );
-           context.strokeStyle = "blue";
-           context.strokeRect(
-             x * size + size - compensation,
-             y * size + compensation,
-             1,
-             1
-           );
-           context.strokeStyle = "orange";
-           context.strokeRect(
-             x * size + size - compensation,
-             y * size + size - compensation,
-             1,
-             1
-           );
-         }
-       }
- 
-       // set bombs
-       let b = 0;
-       console.log("spots", this.state.spots);
-       while (b < _spots) {
-         const _y = _random(0, fieldHeight - 1);
-         const _x = _random(0, fieldWidth - 1);
- 
-         if (_arr[_y][_x].val !== -2 && _arr[_y][_x].val !== -1) {
-           b += 1;
-           _arr[_y][_x].val = -1;
-         }
-       }
- 
-       // set other blocks
-       for (let y = 0; y < fieldHeight; y++) {
-         for (let x = 0; x < fieldWidth; x++) {
-           if (_arr[y][x].val !== -1 && _arr[y][x].val !== -2) {
-             if (y - 1 >= 0 && x - 1 >= 0) {
-               _arr[y][x].val += +(_arr[y - 1][x - 1].val === -1);
-             }
- 
-             if (y - 1 >= 0) {
-               _arr[y][x].val += +(_arr[y - 1][x].val === -1);
-             }
- 
-             if (y - 1 >= 0 && x + 1 < fieldHeight) {
-               _arr[y][x].val += +(_arr[y - 1][x + 1].val === -1);
-             }
- 
-             if (x + 1 < fieldWidth) {
-               _arr[y][x].val += +(_arr[y][x + 1].val === -1);
-             }
- 
-             if (y + 1 < fieldHeight && x + 1 < fieldWidth) {
-               _arr[y][x].val += +(_arr[y + 1][x + 1].val === -1);
-             }
- 
-             if (y + 1 < fieldHeight) {
-               _arr[y][x].val += +(_arr[y + 1][x].val === -1);
-             }
- 
-             if (y + 1 < fieldHeight && x - 1 >= 0) {
-               _arr[y][x].val += +(_arr[y + 1][x - 1].val === -1);
-             }
- 
-             if (x - 1 >= 0) {
-               _arr[y][x].val += +(_arr[y][x - 1].val === -1);
-             }
-           }
-         }
-       }
-     });
+    
+    const _spots = Math.floor(fieldWidth * fieldHeight * 0.1);
+    const _imageRatio = imageWidth / (fieldWidth * size);
+    const _arr = [];
 
+    const canvas = this.removed_canvasRef.current;
+    const context = canvas.getContext("2d");
+    canvas.width = fieldWidth * size;
+    canvas.height = fieldHeight * size;
 
+    const image = new Image();
+    image.src = back_url;
+    image.addEventListener("load", () => {
+      context.drawImage(image, 0, 0, canvas.width, canvas.height);
 
-this.setState({field: _arr, spots: _spots, imageRatio: _imageRatio});
+      // step inside
+      const compensation = 3;
 
-  }
+      for (let y = 0; y < fieldHeight; y++) {
+        _arr[y] = [];
 
-  componentDidUpdate( prevProps,  prevState) {
-    console.log("App componentDidUpdate", prevState.field_size_factor, this.state.field_size_factor, this.state.fieldWidth);
-    if ( prevState.field_size_factor !==  this.state.field_size_factor) {
+        for (let x = 0; x < fieldWidth; x++) {
+          if (
+            context.getImageData(
+              x * size + compensation,
+              y * size + compensation,
+              1,
+              1
+            ).data[0] > 0 ||
+            context.getImageData(
+              x * size + compensation,
+              y * size + size + compensation,
+              1,
+              1
+            ).data[0] > 0 ||
+            context.getImageData(
+              x * size + size - compensation,
+              y * size + compensation,
+              1,
+              1
+            ).data[0] > 0 ||
+            context.getImageData(
+              x * size + size - compensation,
+              y * size + size - compensation,
+              1,
+              1
+            ).data[0] > 0 ||
+            context.getImageData(
+              x * size + compensation,
+              y * size + size / 2 - compensation,
+              1,
+              1
+            ).data[0] > 0 ||
+            context.getImageData(
+              x * size + compensation,
+              y * size + size / 2 - compensation,
+              1,
+              1
+            ).data[0] > 0
+          ) {
+            _arr[y][x] = {
+              val: 0,
+              status: "hidden",
+              y: y,
+              x: x,
+              size: size,
+              left: x * size,
+              top: y * size,
+              med: false,
+              updated: 0,
+            };
+          } else {
+            _arr[y][x] = {
+              val: -2,
+              status: "hidden",
+              y: y,
+              x: x,
+              size: size,
+              left: x * size,
+              top: y * size,
+              med: false,
+              updated: 0,
+            };
+          }
 
+          //set num
+          //  context.font = 20 + "px Arial";
+          //  context.textAlign = "center";
+          //  context.textBaseline = "middle";
+          //  context.fillStyle = "gray";
+
+          //  context.fillText(
+          //    String(_arr[y][x].val),
+          //    x * size + 20,
+          //    y * size + 20
+          //  );
+
+          context.strokeStyle = "red";
+          context.strokeRect(
+            x * size + compensation,
+            y * size + compensation,
+            1,
+            1
+          );
+          context.strokeStyle = "green";
+          context.strokeRect(
+            x * size + compensation,
+            y * size + size - compensation,
+            1,
+            1
+          );
+          context.strokeStyle = "blue";
+          context.strokeRect(
+            x * size + size - compensation,
+            y * size + compensation,
+            1,
+            1
+          );
+          context.strokeStyle = "orange";
+          context.strokeRect(
+            x * size + size - compensation,
+            y * size + size - compensation,
+            1,
+            1
+          );
+        }
+      }
+
+      // set bombs
+      let b = 0;
+      console.log("spots", this.state.spots);
+      while (b < _spots) {
+        const _y = _random(0, fieldHeight - 1);
+        const _x = _random(0, fieldWidth - 1);
+
+        if (_arr[_y][_x].val !== -2 && _arr[_y][_x].val !== -1) {
+          b += 1;
+          _arr[_y][_x].val = -1;
+        }
+      }
+
+      // set other blocks
+      for (let y = 0; y < fieldHeight; y++) {
+        for (let x = 0; x < fieldWidth; x++) {
+          if (_arr[y][x].val !== -1 && _arr[y][x].val !== -2) {
+            if (y - 1 >= 0 && x - 1 >= 0) {
+              _arr[y][x].val += +(_arr[y - 1][x - 1].val === -1);
+            }
+
+            if (y - 1 >= 0) {
+              _arr[y][x].val += +(_arr[y - 1][x].val === -1);
+            }
+
+            if (y - 1 >= 0 && x + 1 < fieldHeight) {
+              _arr[y][x].val += +(_arr[y - 1][x + 1].val === -1);
+            }
+
+            if (x + 1 < fieldWidth) {
+              _arr[y][x].val += +(_arr[y][x + 1].val === -1);
+            }
+
+            if (y + 1 < fieldHeight && x + 1 < fieldWidth) {
+              _arr[y][x].val += +(_arr[y + 1][x + 1].val === -1);
+            }
+
+            if (y + 1 < fieldHeight) {
+              _arr[y][x].val += +(_arr[y + 1][x].val === -1);
+            }
+
+            if (y + 1 < fieldHeight && x - 1 >= 0) {
+              _arr[y][x].val += +(_arr[y + 1][x - 1].val === -1);
+            }
+
+            if (x - 1 >= 0) {
+              _arr[y][x].val += +(_arr[y][x - 1].val === -1);
+            }
+          }
+        }
+      }
+    });
+ 
+         
+    //set main map blok size ratio
+      console.log('_screenWidth',_screenWidth);
+      console.log('_screenHeight', _screenHeight);
+      //1024×768_screenWidth
+      const _safe_width = _screenWidth - _screenWidth * 0.1;  
+      const _safe_height = _screenHeight - _screenHeight * 0.1 - 150;
+    
+      console.log('_safe_width',_safe_width);
+      console.log('_safe_height', _safe_height);
+    
+      const _x_screenRatio = (_safe_width / (fieldWidth * size)).toFixed(1);
+    
+      const _y_screenRatio = (_safe_height / (fieldHeight * size)).toFixed(1);
+      console.log("x y", _x_screenRatio, _y_screenRatio);
+    
+      const _screenRatio = _x_screenRatio <= _y_screenRatio ? _x_screenRatio : _y_screenRatio
+    console.log('_screenRatio !!',_screenRatio);
+     ;
+    
+
+    this.setState({ field: _arr, spots: _spots, imageRatio: _imageRatio,
+       screenRatio: _screenRatio });
+  };
+
+  componentDidUpdate(prevProps, prevState) {
+    console.log(
+      "App componentDidUpdate",
+      prevState.field_size_factor,
+      this.state.field_size_factor,
+      this.state.fieldWidth
+    );
+    if (prevState.field_size_factor !== this.state.field_size_factor) {
       this.setNewField();
-
-      
     }
+
   }
 
   leftClickHandler = (block) => {
@@ -311,8 +334,6 @@ this.setState({field: _arr, spots: _spots, imageRatio: _imageRatio});
 
     this.setState({ field: _arr, gameOver: _gameOver });
   };
-
-
 
   rightClickHandler = (e, block) => {
     e.preventDefault();
@@ -384,28 +405,29 @@ this.setState({field: _arr, spots: _spots, imageRatio: _imageRatio});
       playGame,
       screenWidth,
       screenHeight,
-      field_size_factor
+      field_size_factor,
+      screenRatio,
     } = this.state;
 
     let _style = null;
 
-   if (screenHeight > screenWidth) {   
-     _style = {
-      width:(screenWidth * 0.8),
-      height: (screenWidth * 0.8)/1.25,
-    };
-  } else {  _style = {
-    width:(screenHeight * 0.7)*1.25,
-    height: (screenHeight * 0.7),
-  };}
-
-   
+    if (screenHeight > screenWidth) {
+      _style = {
+        width: screenWidth * 0.8,
+        height: (screenWidth * 0.8) / 1.25,
+      };
+    } else {
+      _style = {
+        width: screenHeight * 0.7 * 1.25,
+        height: screenHeight * 0.7,
+      };
+    }
 
     return (
       <div className="App">
-        <Header 
-        field_size_factor =  { field_size_factor }
-        fieldSizeHandler = { this.fieldSizeHandler }
+        <Header
+          field_size_factor={field_size_factor}
+          fieldSizeHandler={this.fieldSizeHandler}
         />
 
         {playGame === false ? (
@@ -426,6 +448,7 @@ this.setState({field: _arr, spots: _spots, imageRatio: _imageRatio});
             fieldWidth={fieldWidth}
             fieldHeight={fieldHeight}
             imageRatio={imageRatio}
+            screenRatio={screenRatio}
             leftClickHandler={this.leftClickHandler}
             rightClickHandler={this.rightClickHandler}
           />
