@@ -8,6 +8,7 @@ import back_url from "./assets/img/dig_bel_2+.png";
 
 import ButtonPlay from "./components/button-play";
 import Footer from "./components/footer";
+import music_url from "./assets/sound/music_1.mp3";
 
 class App extends Component {
   state = {
@@ -66,13 +67,24 @@ class App extends Component {
     });
   }
 
-  musicControlHandler = () => {
-    console.log('musicControlHandler');
-    let _musicON = this.state.musicON;
-    _musicON = !_musicON;
-    this.setState({musicON: _musicON}, () => console.log(this.state.musicON));
+  musicSingleton = new Audio(music_url);
+  
 
-  }
+  musicControlHandler = () => {
+    console.log("musicControlHandler");
+    this.musicSingleton.loop = true;
+    let _musicON = this.state.musicON;
+
+    _musicON = !_musicON;
+
+    if (_musicON) {
+      this.musicSingleton.play();
+    } else {
+      this.musicSingleton.pause();
+    }
+
+    this.setState({ musicON: _musicON }, () => console.log(this.state.musicON));
+  };
 
   setNewField = () => {
     //get arr
@@ -465,7 +477,7 @@ class App extends Component {
           field_size_factor={field_size_factor}
           fieldSizeHandler={this.fieldSizeHandler}
           setNewGame={this.setNewGame}
-          musicControlHandler = {this.musicControlHandler}
+          musicControlHandler={this.musicControlHandler}
         />
 
         {playGame === false ? (
