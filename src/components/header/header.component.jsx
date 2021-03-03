@@ -1,16 +1,18 @@
 import './header.style.css';
 import c19 from '../../assets/img/c19.png';
 import button from '../../assets/img/button persistence_2.png';
+import ButtonMusic from '../button_music';
 const Header = (props) => {
   const {
     field_size_factor,
-    fieldSizeHandler,
     fieldWidth,
     size,
     screenRatio,
     spots,
     med_boxes,
-    setNewGame
+    setNewGame,
+    fieldSizeHandler,
+    musicControlHandler
   } = props;
  
   const _style = {
@@ -36,6 +38,8 @@ const Header = (props) => {
             <div>{spots - med_boxes}</div>
           </div>
         </div>
+
+        <ButtonMusic  musicControlHandler = {musicControlHandler}/>
       </div>
     </div>
   );

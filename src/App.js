@@ -24,11 +24,12 @@ class App extends Component {
     screenWidth: 0,
     screenHeight: 0,
     screenRatio: 1,
-
     scanReady: false,
 
     playGame: false,
     gameOver: false,
+
+    musicON: false,
   };
 
   removed_canvasRef = React.createRef();
@@ -63,6 +64,14 @@ class App extends Component {
       screenWidth: _screenWidth,
       screenHeight: _screenHeight,
     });
+  }
+
+  musicControlHandler = () => {
+    console.log('musicControlHandler');
+    let _musicON = this.state.musicON;
+    _musicON = !_musicON;
+    this.setState({musicON: _musicON}, () => console.log(this.state.musicON));
+
   }
 
   setNewField = () => {
@@ -456,6 +465,7 @@ class App extends Component {
           field_size_factor={field_size_factor}
           fieldSizeHandler={this.fieldSizeHandler}
           setNewGame={this.setNewGame}
+          musicControlHandler = {this.musicControlHandler}
         />
 
         {playGame === false ? (
