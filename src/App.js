@@ -366,10 +366,11 @@ class App extends Component {
     const _arr = this.state.field;
 
  
-
-    _arr[block.y][block.x].med = (_arr[block.y][block.x].med &&  _arr[block.y][block.x].status === 'hidden')
-      ? (_arr[block.y][block.x].med = false)
-      : (_arr[block.y][block.x].med = true);
+if (_arr[block.y][block.x].status === 'hidden') {  
+  _arr[block.y][block.x].med = (_arr[block.y][block.x].med)
+  ? (_arr[block.y][block.x].med = false)
+  : (_arr[block.y][block.x].med = true);
+}
 
     let _med_boxes = 0;
 
