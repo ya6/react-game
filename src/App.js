@@ -365,9 +365,9 @@ class App extends Component {
 
     const _arr = this.state.field;
 
-    //predState
+ 
 
-    _arr[block.y][block.x].med = _arr[block.y][block.x].med
+    _arr[block.y][block.x].med = (_arr[block.y][block.x].med &&  _arr[block.y][block.x].status === 'hidden')
       ? (_arr[block.y][block.x].med = false)
       : (_arr[block.y][block.x].med = true);
 
