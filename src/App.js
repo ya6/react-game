@@ -71,7 +71,6 @@ class App extends Component {
   
 
   musicControlHandler = () => {
-    console.log("musicControlHandler");
     this.musicSingleton.loop = true;
     let _musicON = this.state.musicON;
 
@@ -83,7 +82,7 @@ class App extends Component {
       this.musicSingleton.pause();
     }
 
-    this.setState({ musicON: _musicON }, () => console.log(this.state.musicON));
+    this.setState({ musicON: _musicON });
   };
 
   setNewField = () => {

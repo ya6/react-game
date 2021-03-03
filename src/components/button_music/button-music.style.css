@@ -1,3 +1,4 @@
+/* vendor */
 *,*:before,*:after{
     box-sizing:border-box;
     margin:0;
@@ -14,10 +15,8 @@
     #toggles{
     width:4rem;
     margin-left: 0.5rem;
-  
     text-align:center;
    
-
     }
     .ios-toggle,.ios-toggle:active{
     position:absolute;
