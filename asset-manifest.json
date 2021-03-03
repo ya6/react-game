@@ -1,26 +1,28 @@
 {
   "files": {
-    "main.css": "/react-game/static/css/main.9daba92d.chunk.css",
-    "main.js": "/react-game/static/js/main.236a1c1e.chunk.js",
-    "main.js.map": "/react-game/static/js/main.236a1c1e.chunk.js.map",
-    "runtime-main.js": "/react-game/static/js/runtime-main.c66da2b6.js",
-    "runtime-main.js.map": "/react-game/static/js/runtime-main.c66da2b6.js.map",
-    "static/js/2.64ea6999.chunk.js": "/react-game/static/js/2.64ea6999.chunk.js",
-    "static/js/2.64ea6999.chunk.js.map": "/react-game/static/js/2.64ea6999.chunk.js.map",
-    "static/js/3.571daf02.chunk.js": "/react-game/static/js/3.571daf02.chunk.js",
-    "static/js/3.571daf02.chunk.js.map": "/react-game/static/js/3.571daf02.chunk.js.map",
+    "main.css": "/react-game/static/css/main.b1ee2519.chunk.css",
+    "main.js": "/react-game/static/js/main.70b16647.chunk.js",
+    "main.js.map": "/react-game/static/js/main.70b16647.chunk.js.map",
+    "runtime-main.js": "/react-game/static/js/runtime-main.f4346f7b.js",
+    "runtime-main.js.map": "/react-game/static/js/runtime-main.f4346f7b.js.map",
+    "static/js/2.36210eec.chunk.js": "/react-game/static/js/2.36210eec.chunk.js",
+    "static/js/2.36210eec.chunk.js.map": "/react-game/static/js/2.36210eec.chunk.js.map",
+    "static/js/3.cd16a6bb.chunk.js": "/react-game/static/js/3.cd16a6bb.chunk.js",
+    "static/js/3.cd16a6bb.chunk.js.map": "/react-game/static/js/3.cd16a6bb.chunk.js.map",
     "index.html": "/react-game/index.html",
-    "static/css/main.9daba92d.chunk.css.map": "/react-game/static/css/main.9daba92d.chunk.css.map",
-    "static/js/2.64ea6999.chunk.js.LICENSE.txt": "/react-game/static/js/2.64ea6999.chunk.js.LICENSE.txt",
+    "static/css/main.b1ee2519.chunk.css.map": "/react-game/static/css/main.b1ee2519.chunk.css.map",
+    "static/js/2.36210eec.chunk.js.LICENSE.txt": "/react-game/static/js/2.36210eec.chunk.js.LICENSE.txt",
     "static/media/index.css": "/react-game/static/media/back_binary.8df7a6ff.jpg",
     "static/media/c19.ee2a5f71.png": "/react-game/static/media/c19.ee2a5f71.png",
     "static/media/dig_bel_2+.afb2bbee.png": "/react-game/static/media/dig_bel_2+.afb2bbee.png",
-    "static/media/med_box.45878a99.png": "/react-game/static/media/med_box.45878a99.png"
+    "static/media/med_box.45878a99.png": "/react-game/static/media/med_box.45878a99.png",
+    "static/media/music.fbd2828b.png": "/react-game/static/media/music.fbd2828b.png",
+    "static/media/music_1.4092ebe2.mp3": "/react-game/static/media/music_1.4092ebe2.mp3"
   },
   "entrypoints": [
-    "static/js/runtime-main.c66da2b6.js",
-    "static/js/2.64ea6999.chunk.js",
-    "static/css/main.9daba92d.chunk.css",
-    "static/js/main.236a1c1e.chunk.js"
+    "static/js/runtime-main.f4346f7b.js",
+    "static/js/2.36210eec.chunk.js",
+    "static/css/main.b1ee2519.chunk.css",
+    "static/js/main.70b16647.chunk.js"
   ]
 }
